@@ -1,0 +1,17 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "Fredriks Todo Lists - Synkade med Telegram",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "build": "echo 'No build step needed - static site'",
+    "deploy": "gh-pages -d ."
+  },
+  "keywords": ["todo", "lists", "telegram", "sync"],
+  "author": "Fredrik Berg",
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
+  }
+}
