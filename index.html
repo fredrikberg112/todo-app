@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 Fredriks Todo Lists</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0a0f;
+            --bg-panel: #111118;
+            --bg-card: #16161f;
+            --bg-hover: #1c1c28;
+            --border: #222233;
+            --border-active: #334466;
+            --cyan: #00d4ff;
+            --cyan-dim: #00d4ff22;
+            --pink: #ff006e;
+            --pink-dim: #ff006e22;
+            --green: #00ff88;
+            --green-dim: #00ff8822;
+            --amber: #ffaa00;
+            --amber-dim: #ffaa0022;
+            --purple: #9d4edd;
+            --purple-dim: #9d4edd22;
+            --text-primary: #e8e8f0;
+            --text-secondary: #8888a0;
+            --text-muted: #555570;
+            --radius: 10px;
+            --radius-sm: 6px;
+            --transition: 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .app-header {
+            text-align: center;
+            padding: 24px 0;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .app-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 8px;
+        }
+
+        .app-header p {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* Quick Add */
+        .quick-add {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .quick-add-input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 12px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .quick-add-input:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px var(--cyan-dim);
+        }
+
+        .quick-add-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .quick-add-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .list-selector {
+            flex: 1;
+            min-width: 150px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .list-selector:focus {
+            border-color: var(--cyan);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--cyan);
+            color: var(--bg-deep);
+        }
+
+        .btn-primary:hover {
+            background: #33ddff;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        /* Lists Grid */
+        .lists-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .list-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .list-card:hover {
+            border-color: var(--border-active);
+        }
+
+        .list-card.active {
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+
+        .list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .list-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .list-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .list-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .list-info .list-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .list-toggle {
+            font-size: 20px;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .list-card.expanded .list-toggle {
+            transform: rotate(180deg);
+        }
+
+        /* Items */
+        .list-items {
+            padding: 12px;
+            display: none;
+        }
+
+        .list-card.expanded .list-items {
+            display: block;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .todo-item:hover {
+            background: var(--bg-hover);
+        }
+
+        .todo-item.completed {
+            opacity: 0.5;
+        }
+
+        .todo-item.completed .item-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .item-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .todo-item:hover .item-checkbox {
+            border-color: var(--cyan);
+        }
+
+        .todo-item.completed .item-checkbox {
+            background: var(--green);
+            border-color: var(--green);
+        }
+
+        .item-checkbox::after {
+            content: '✓';
+            color: var(--bg-deep);
+            font-size: 12px;
+            font-weight: 700;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .todo-item.completed .item-checkbox::after {
+            opacity: 1;
+        }
+
+        .item-text {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .item-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Add item to list */
+        .add-item-row {
+            display: flex;
+            gap: 8px;
+            padding: 8px 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 8px;
+        }
+
+        .add-item-input {
+            flex: 1;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .add-item-input:focus {
+            border-color: var(--cyan);
+        }
+
+        .btn-small {
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            height: 3px;
+            background: var(--bg-hover);
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--green);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.partial {
+            background: var(--amber);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.3;
+        }
+
+        /* Summary */
+        .summary-card {
+            background: linear-gradient(135deg, var(--cyan-dim), var(--purple-dim));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .summary-header {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--cyan);
+            margin-bottom: 12px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Delete button */
+        .btn-delete {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            opacity: 0;
+        }
+
+        .todo-item:hover .btn-delete {
+            opacity: 1;
+        }
+
+        .btn-delete:hover {
+            color: var(--pink);
+            background: var(--pink-dim);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .app-container {
+                padding: 12px;
+            }
+
+            .app-header h1 {
+                font-size: 20px;
+            }
+
+            .quick-add-row {
+                flex-direction: column;
+            }
+
+            .list-selector {
+                width: 100%;
+            }
+
+            .summary-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>📝 Fredriks Lists</h1>
+            <p>Hantera dina todo-listor — synkade med Telegram</p>
+        </header>
+
+        <!-- Summary -->
+        <div class="summary-card" id="summary-card">
+            <div class="summary-header">📊 Dagens Översikt</div>
+            <div class="summary-stats" id="summary-stats">
+                <!-- Filled by JS -->
+            </div>
+        </div>
+
+        <!-- Quick Add -->
+        <div class="quick-add">
+            <input type="text" class="quick-add-input" id="quick-add-input" 
+                   placeholder="Lägg till något... t.ex. 'handla mjölk bröd morot'">
+            <div class="quick-add-row">
+                <select class="list-selector" id="list-selector">
+                    <option value="handla">🛒 Handla</option>
+                    <option value="jobb">💼 Jobb</option>
+                    <option value="dagsplanering">📅 Dagsplanering</option>
+                </select>
+                <button class="btn btn-primary" onclick="addFromInput()">
+                    <span>➕</span> Lägg till
+                </button>
+            </div>
+        </div>
+
+        <!-- Lists -->
+        <div class="lists-grid" id="lists-grid">
+            <!-- Filled by JS -->
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
