@@ -1,34 +1,37 @@
 // ── CONFIG ──
-const STORAGE_KEY = 'fredriks_lists_v2';
+const STORAGE_KEY = '***';
 
-// ── DEFAULT LISTS ──
-const defaultLists = {
-    handla: {
-        id: 'handla',
-        name: 'Handla',
-        icon: '🛒',
-        color: '#00d4ff',
-        items: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+// ── EMBEDDED DATA (from lists.json) ──
+const EMBEDDED_LISTS = {
+    "handla": {
+        "id": "handla",
+        "name": "Handla",
+        "icon": "🛒",
+        "color": "#00d4ff",
+        "items": [
+            {"id": "test1", "text": "test1", "completed": false, "createdAt": "2026-06-01T11:25:46.257Z", "completedAt": null},
+            {"id": "test2", "text": "test2", "completed": false, "createdAt": "2026-06-01T11:25:46.257Z", "completedAt": null}
+        ],
+        "createdAt": "2026-06-01T08:14:17.156Z",
+        "updatedAt": "2026-06-01T11:25:46.257Z"
     },
-    jobb: {
-        id: 'jobb',
-        name: 'Jobb',
-        icon: '💼',
-        color: '#ffaa00',
-        items: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+    "jobb": {
+        "id": "jobb",
+        "name": "Jobb",
+        "icon": "💼",
+        "color": "#ffaa00",
+        "items": [],
+        "createdAt": "2026-06-01T08:14:17.157Z",
+        "updatedAt": "2026-06-01T11:25:46.257Z"
     },
-    dagsplanering: {
-        id: 'dagsplanering',
-        name: 'Dagsplanering',
-        icon: '📅',
-        color: '#9d4edd',
-        items: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+    "dagsplanering": {
+        "id": "dagsplanering",
+        "name": "Dagsplanering",
+        "icon": "📅",
+        "color": "#9d4edd",
+        "items": [],
+        "createdAt": "2026-06-01T08:14:17.157Z",
+        "updatedAt": "2026-06-01T11:25:46.257Z"
     }
 };
 
@@ -60,18 +63,19 @@ function loadLists() {
         if (saved) {
             lists = JSON.parse(saved);
             // Ensure all lists exist
-            Object.keys(defaultLists).forEach(key => {
+            Object.keys(EMBEDDED_LISTS).forEach(key => {
                 if (!lists[key]) {
-                    lists[key] = JSON.parse(JSON.stringify(defaultLists[key]));
+                    lists[key] = JSON.parse(JSON.stringify(EMBEDDED_LISTS[key]));
                 }
             });
         } else {
-            lists = JSON.parse(JSON.stringify(defaultLists));
+            // First time - use embedded data
+            lists = JSON.parse(JSON.stringify(EMBEDDED_LISTS));
             saveLists();
         }
     } catch (e) {
         console.error('Error loading lists:', e);
-        lists = JSON.parse(JSON.stringify(defaultLists));
+        lists = JSON.parse(JSON.stringify(EMBEDDED_LISTS));
     }
 }
 
