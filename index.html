@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📝 Fredriks Todo Lists</title>
+    <title>📝 Fredriks Lists</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -16,170 +16,50 @@
             padding: 20px;
         }
         .container { max-width: 600px; margin: 0 auto; }
-        h1 {
-            text-align: center;
-            color: #00d4ff;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #8888a0;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
+        h1 { text-align: center; color: #00d4ff; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { text-align: center; color: #8888a0; margin-bottom: 30px; font-size: 14px; }
+        .last-updated { text-align: center; color: #555570; font-size: 12px; margin-bottom: 16px; }
         .summary {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
             margin-bottom: 20px;
             background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(157,78,221,0.1));
-            border: 1px solid #222233;
-            border-radius: 10px;
-            padding: 16px;
+            border: 1px solid #222233; border-radius: 10px; padding: 16px;
         }
-        .stat {
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-        }
-        .stat-label {
-            font-size: 12px;
-            color: #8888a0;
-            margin-top: 4px;
-        }
+        .stat { text-align: center; }
+        .stat-value { font-size: 28px; font-weight: 700; }
+        .stat-label { font-size: 12px; color: #8888a0; margin-top: 4px; }
         .list-card {
-            background: #16161f;
-            border: 1px solid #222233;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            overflow: hidden;
+            background: #16161f; border: 1px solid #222233; border-radius: 10px;
+            margin-bottom: 12px; overflow: hidden;
         }
         .list-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px;
-            background: #111118;
-            cursor: pointer;
-            border-bottom: 1px solid #222233;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px; background: #111118; cursor: pointer; border-bottom: 1px solid #222233;
         }
-        .list-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .list-icon {
-            font-size: 24px;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #1c1c28;
-            border-radius: 8px;
-        }
-        .list-name {
-            font-weight: 600;
-            font-size: 18px;
-        }
-        .list-meta {
-            font-size: 12px;
-            color: #8888a0;
-        }
-        .toggle-btn {
-            font-size: 12px;
-            color: #8888a0;
-        }
-        .list-items {
-            padding: 12px;
-        }
+        .list-title { display: flex; align-items: center; gap: 10px; }
+        .list-icon { font-size: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #1c1c28; border-radius: 8px; }
+        .list-name { font-weight: 600; font-size: 18px; }
+        .list-meta { font-size: 12px; color: #8888a0; }
+        .toggle-btn { font-size: 12px; color: #8888a0; }
+        .list-items { padding: 12px; }
         .todo-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 12px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            background: #111118;
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: 6px; margin-bottom: 6px; background: #111118;
         }
-        .todo-item.completed {
-            opacity: 0.5;
-        }
-        .todo-item.completed .item-text {
-            text-decoration: line-through;
-            color: #8888a0;
-        }
+        .todo-item.completed { opacity: 0.5; }
+        .todo-item.completed .item-text { text-decoration: line-through; color: #8888a0; }
         .checkbox {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #555570;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
+            width: 20px; height: 20px; border: 2px solid #555570; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
         }
-        .checkbox.checked {
-            background: #00ff88;
-            border-color: #00ff88;
-        }
-        .checkbox.checked::after {
-            content: '✓';
-            color: #0a0a0f;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .item-text {
-            flex: 1;
-        }
-        .btn-clear {
-            background: #ff006e22;
-            color: #ff006e;
-            border: 1px solid #ff006e;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-        .btn-refresh {
-            background: #00d4ff22;
-            color: #00d4ff;
-            border: 1px solid #00d4ff;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 16px;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 30px;
-            color: #555570;
-        }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #00d4ff;
-        }
-        .error {
-            text-align: center;
-            padding: 20px;
-            color: #ff006e;
-            background: #ff006e22;
-            border-radius: 8px;
-            margin-bottom: 16px;
-        }
-        .last-updated {
-            text-align: center;
-            color: #555570;
-            font-size: 12px;
-            margin-bottom: 16px;
-        }
+        .checkbox.checked { background: #00ff88; border-color: #00ff88; }
+        .checkbox.checked::after { content: '✓'; color: #0a0a0f; font-size: 12px; font-weight: bold; }
+        .item-text { flex: 1; }
+        .btn-clear { background: #ff006e22; color: #ff006e; border: 1px solid #ff006e; padding: 4px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+        .btn-refresh { background: #00d4ff22; color: #00d4ff; border: 1px solid #00d4ff; padding: 8px 16px; border-radius: 6px; font-size: 14px; cursor: pointer; width: 100%; margin-bottom: 16px; }
+        .empty-state { text-align: center; padding: 30px; color: #555570; }
+        .loading { text-align: center; padding: 40px; color: #00d4ff; }
+        .error { text-align: center; padding: 20px; color: #ff006e; background: #ff006e22; border-radius: 8px; margin-bottom: 16px; }
     </style>
 </head>
 <body>
@@ -188,8 +68,8 @@
         <p class="subtitle">Synkade med Telegram</p>
         
         <div id="error" style="display: none;"></div>
-        <button class="btn-refresh" onclick="loadFromGitHub()">
-            🔄 Ladda om
+        <button class="btn-refresh" onclick="forceUpdate()">
+            🔄 Uppdatera från Telegram
         </button>
         
         <div id="last-updated" class="last-updated"></div>
@@ -203,38 +83,61 @@
 
     <script>
         // ── CONFIG ──
-        // Hämta lists.json från GitHub med cache-busting
-        const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/fredrikberg112/todo-app/main/lists.json';
-        
-        // Fallback till localStorage
         const STORAGE_KEY = '***';
         
         let lists = {};
         let expanded = new Set(['handla']);
         let lastUpdated = null;
         
+        // ── DEFAULT DATA (uppdateras av Bosse via GitHub) ──
+        const DEFAULT_DATA = {
+            handla: {
+                id: 'handla', name: 'Handla', icon: '🛒', color: '#00d4ff',
+                items: [
+                    {id: 'h1', text: 'köttfärs', completed: false, createdAt: '2026-06-01T16:00:00Z'},
+                    {id: 'h2', text: 'Ramlösa', completed: false, createdAt: '2026-06-01T16:00:00Z'},
+                    {id: 'h3', text: 'melon', completed: false, createdAt: '2026-06-01T16:00:00Z'}
+                ]
+            },
+            jobb: {
+                id: 'jobb', name: 'Jobb', icon: '💼', color: '#ffaa00', items: []
+            },
+            dagsplanering: {
+                id: 'dagsplanering', name: 'Dagsplanering', icon: '📅', color: '#9d4edd',
+                items: [
+                    {id: 'd1', text: 'Köra bil till 15:00', completed: false, createdAt: '2026-06-01T12:00:00Z'},
+                    {id: 'd2', text: 'Vila 15:30-16:00', completed: false, createdAt: '2026-06-01T12:00:00Z'},
+                    {id: 'd3', text: 'Plocka hemma', completed: false, createdAt: '2026-06-01T12:00:00Z'},
+                    {id: 'd4', text: 'Hämta Mira på jobbet', completed: false, createdAt: '2026-06-01T12:00:00Z'},
+                    {id: 'd5', text: 'Åk 17:00', completed: false, createdAt: '2026-06-01T12:00:00Z'}
+                ]
+            }
+        };
+        
         // ── INIT ──
         function init() {
             console.log('Initializing app...');
-            loadFromGitHub();
+            loadFromLocalStorage();
+            render();
         }
         
-        // ── LOAD FROM GITHUB ──
-        async function loadFromGitHub() {
+        // ── FORCE UPDATE (när Bosse uppdaterat via GitHub) ──
+        async function forceUpdate() {
             showLoading(true);
             hideError();
             
             try {
-                // Cache-busting: lägg till timestamp så webbläsaren alltid hämtar nytt
-                const cacheBuster = '?t=' + new Date().getTime();
-                const url = GITHUB_RAW_URL + cacheBuster;
+                // Försök hämta från GitHub med cache-busting
+                const timestamp = new Date().getTime();
+                const url = 'https://raw.githubusercontent.com/fredrikberg112/todo-app/main/lists.json?t=' + timestamp;
                 
                 console.log('Hämtar från GitHub:', url);
+                
                 const response = await fetch(url, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
-                        'Cache-Control': 'no-cache, no-store, must-revalidate'
+                        'Cache-Control': 'no-cache'
                     }
                 });
                 
@@ -242,65 +145,69 @@
                     throw new Error('GitHub svarade: ' + response.status);
                 }
                 
-                const data = await response.json();
-                console.log('Laddat från GitHub:', data);
+                const text = await response.text();
+                console.log('Rådata från GitHub:', text.substring(0, 200));
                 
-                if (data && (data.handla || data.jobb || data.dagsplanering)) {
+                const data = JSON.parse(text);
+                console.log('Parsad data:', data);
+                
+                if (data && data.handla) {
+                    // BEVARA användarens avbockningar!
+                    preserveUserProgress(data);
+                    
                     lists = data;
                     lastUpdated = new Date();
                     saveToLocalStorage();
                     render();
                     showLastUpdated();
+                    showError('✅ Uppdaterat från Telegram!');
+                    setTimeout(hideError, 3000);
                 } else {
                     throw new Error('Ogiltig data från GitHub');
                 }
             } catch (e) {
-                console.error('Kunde inte ladda från GitHub:', e);
-                showError('Kunde inte nå GitHub. Använder sparad data.');
-                loadFromLocalStorage();
+                console.error('Kunde inte ladda:', e);
+                showError('Kunde inte nå GitHub. Använder lokalt sparad data. (' + e.message + ')');
             } finally {
                 showLoading(false);
             }
         }
         
-        // ── SAVE TO SERVER ──
-        async function saveToServer() {
+        // ── BEVARA ANVÄNDARENS AVBOCKNINGAR ──
+        function preserveUserProgress(newData) {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
+            
             try {
-                console.log('Saving to server...');
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(lists)
-                });
+                const oldData = JSON.parse(saved);
                 
-                if (!response.ok) {
-                    throw new Error('Server svarade: ' + response.status);
+                // För varje lista, bevara avbockade items
+                for (let listId in newData) {
+                    if (oldData[listId] && oldData[listId].items) {
+                        const oldItems = oldData[listId].items;
+                        const newItems = newData[listId].items || [];
+                        
+                        // Markera items som completed om de var det tidigare
+                        newItems.forEach(newItem => {
+                            const oldItem = oldItems.find(i => i.text === newItem.text);
+                            if (oldItem && oldItem.completed) {
+                                newItem.completed = true;
+                            }
+                        });
+                    }
                 }
-                
-                const result = await response.json();
-                console.log('Saved to server:', result);
-                lastUpdated = new Date();
-                saveToLocalStorage();
-                showLastUpdated();
-                return true;
             } catch (e) {
-                console.error('Kunde inte spara till server:', e);
-                // Save to localStorage as fallback
-                saveToLocalStorage();
-                return false;
+                console.error('Kunde inte bevara progress:', e);
             }
         }
         
-        // ── LOCAL STORAGE (fallback) ──
+        // ── LOCAL STORAGE ──
         function saveToLocalStorage() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(lists));
                 localStorage.setItem(STORAGE_KEY + '_time', lastUpdated ? lastUpdated.toISOString() : '');
             } catch (e) {
-                console.error('Kunde inte spara till localStorage:', e);
+                console.error('Kunde inte spara:', e);
             }
         }
         
@@ -314,24 +221,22 @@
                     if (savedTime) {
                         lastUpdated = new Date(savedTime);
                     }
-                    console.log('Loaded from localStorage');
-                    render();
-                    showLastUpdated();
-                    return true;
+                    console.log('Laddat från localStorage');
+                    return;
                 }
             } catch (e) {
                 console.error('Kunde inte ladda från localStorage:', e);
             }
             
-            // Show empty state if nothing found
-            lists = {};
-            render();
-            return false;
+            // Använd default data första gången
+            lists = JSON.parse(JSON.stringify(DEFAULT_DATA));
+            lastUpdated = new Date();
+            saveToLocalStorage();
+            console.log('Använder default data');
         }
         
         // ── RENDER ──
         function render() {
-            console.log('Rendering...');
             renderSummary();
             renderLists();
         }
@@ -363,7 +268,7 @@
             const container = document.getElementById('lists');
             
             if (!lists || Object.keys(lists).length === 0) {
-                container.innerHTML = '<div class="empty-state">Inga listor tillgängliga. Klicka på "Ladda om" för att hämta data.</div>';
+                container.innerHTML = '<div class="empty-state">Inga listor tillgängliga. Klicka på "Uppdatera från Telegram" för att hämta data.</div>';
                 return;
             }
             
@@ -423,18 +328,18 @@
             renderLists();
         };
         
-        window.toggleItem = async function(listId, itemId) {
+        window.toggleItem = function(listId, itemId) {
             if (!lists[listId] || !lists[listId].items) return;
             
             const item = lists[listId].items.find(i => i.id === itemId);
             if (item) {
                 item.completed = !item.completed;
-                await saveToServer();
+                saveToLocalStorage();
                 render();
             }
         };
         
-        window.clearCompleted = async function(listId) {
+        window.clearCompleted = function(listId) {
             if (!lists[listId] || !lists[listId].items) return;
             
             const list = lists[listId];
@@ -443,24 +348,24 @@
             
             if (confirm(`Rensa ${done.length} avbockade items?`)) {
                 list.items = list.items.filter(i => !i.completed);
-                await saveToServer();
+                saveToLocalStorage();
                 render();
             }
         };
         
-        window.loadFromGitHub = loadFromGitHub;
+        window.forceUpdate = forceUpdate;
         
         // ── UI HELPERS ──
         function showLoading(show) {
             const el = document.getElementById('summary');
             if (show) {
-                el.innerHTML = '<div class="loading">Laddar...</div>';
+                el.innerHTML = '<div class="loading">Uppdaterar...</div>';
             }
         }
         
         function showError(message) {
             const el = document.getElementById('error');
-            el.innerHTML = '<div class="error">⚠️ ' + escapeHtml(message) + '</div>';
+            el.innerHTML = message;
             el.style.display = 'block';
         }
         
