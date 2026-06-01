@@ -188,7 +188,7 @@
         <p class="subtitle">Synkade med Telegram</p>
         
         <div id="error" style="display: none;"></div>
-        <button class="btn-refresh" onclick="loadFromServer()">
+        <button class="btn-refresh" onclick="loadFromGitHub()">
             🔄 Ladda om
         </button>
         
@@ -203,12 +203,10 @@
 
     <script>
         // ── CONFIG ──
-        // Use Mission Control server API
-        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:3333/api/todo'
-            : 'http://' + window.location.hostname + ':3333/api/todo';
+        // Hämta lists.json från GitHub med cache-busting
+        const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/fredrikberg112/todo-app/main/lists.json';
         
-        // Fallback to localStorage for offline use
+        // Fallback till localStorage
         const STORAGE_KEY = '***';
         
         let lists = {};
@@ -218,30 +216,34 @@
         // ── INIT ──
         function init() {
             console.log('Initializing app...');
-            console.log('API URL:', API_URL);
-            loadFromServer();
+            loadFromGitHub();
         }
         
-        // ── LOAD FROM SERVER ──
-        async function loadFromServer() {
+        // ── LOAD FROM GITHUB ──
+        async function loadFromGitHub() {
             showLoading(true);
             hideError();
             
             try {
-                console.log('Fetching from server...');
-                const response = await fetch(API_URL + '?t=' + Date.now(), {
+                // Cache-busting: lägg till timestamp så webbläsaren alltid hämtar nytt
+                const cacheBuster = '?t=' + new Date().getTime();
+                const url = GITHUB_RAW_URL + cacheBuster;
+                
+                console.log('Hämtar från GitHub:', url);
+                const response = await fetch(url, {
                     method: 'GET',
                     headers: {
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'Cache-Control': 'no-cache, no-store, must-revalidate'
                     }
                 });
                 
                 if (!response.ok) {
-                    throw new Error('Server svarade: ' + response.status);
+                    throw new Error('GitHub svarade: ' + response.status);
                 }
                 
                 const data = await response.json();
-                console.log('Loaded from server:', data);
+                console.log('Laddat från GitHub:', data);
                 
                 if (data && (data.handla || data.jobb || data.dagsplanering)) {
                     lists = data;
@@ -250,11 +252,11 @@
                     render();
                     showLastUpdated();
                 } else {
-                    throw new Error('Ogiltig data från server');
+                    throw new Error('Ogiltig data från GitHub');
                 }
             } catch (e) {
-                console.error('Kunde inte ladda från server:', e);
-                showError('Kunde inte nå servern. Använder sparad data. Se till att Mission Control är igång på din dator.');
+                console.error('Kunde inte ladda från GitHub:', e);
+                showError('Kunde inte nå GitHub. Använder sparad data.');
                 loadFromLocalStorage();
             } finally {
                 showLoading(false);
@@ -446,7 +448,7 @@
             }
         };
         
-        window.loadFromServer = loadFromServer;
+        window.loadFromGitHub = loadFromGitHub;
         
         // ── UI HELPERS ──
         function showLoading(show) {
