@@ -1,6 +1,6 @@
 // ── CONFIG ──
 const GITHUB_REPO = 'fredrikberg112/todo-app';
-const GITHUB_TOKEN = '';
+const GITHUB_TOKEN = localStorage.getItem('github_token') || '';
 const DATA_BRANCH = 'main';
 const LISTS_PATH = 'lists.json';
 
