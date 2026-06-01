@@ -48,9 +48,45 @@ const EMBEDDED_LISTS = {
         "name": "Dagsplanering",
         "icon": "📅",
         "color": "#9d4edd",
-        "items": [],
+        "items": [
+            {
+                "id": "d1",
+                "text": "Köra bil till 15:00",
+                "completed": false,
+                "createdAt": "2026-06-01T13:13:06.139Z",
+                "completedAt": null
+            },
+            {
+                "id": "d2",
+                "text": "Vila 15:30-16:00",
+                "completed": false,
+                "createdAt": "2026-06-01T13:13:06.140Z",
+                "completedAt": null
+            },
+            {
+                "id": "d3",
+                "text": "Plocka hemma",
+                "completed": false,
+                "createdAt": "2026-06-01T13:13:06.140Z",
+                "completedAt": null
+            },
+            {
+                "id": "d4",
+                "text": "Hämta Mira på jobbet",
+                "completed": false,
+                "createdAt": "2026-06-01T13:13:06.140Z",
+                "completedAt": null
+            },
+            {
+                "id": "d5",
+                "text": "Åk 17:00",
+                "completed": false,
+                "createdAt": "2026-06-01T13:13:06.140Z",
+                "completedAt": null
+            }
+        ],
         "createdAt": "2026-06-01T08:14:17.157Z",
-        "updatedAt": "2026-06-01T11:25:46.257Z"
+        "updatedAt": "2026-06-01T13:13:06.140Z"
     }
 };
 
