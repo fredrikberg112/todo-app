@@ -221,6 +221,18 @@ function deleteItem(listId, itemId) {
     saveLists();
 }
 
+function clearCompleted(listId) {
+    const completedCount = lists[listId].items.filter(i => i.completed).length;
+    if (completedCount === 0) return;
+    
+    if (!confirm(`Rensa ${completedCount} avbockade items?`)) return;
+    
+    lists[listId].items = lists[listId].items.filter(i => !i.completed);
+    lists[listId].updatedAt = new Date().toISOString();
+    render();
+    saveLists();
+}
+
 function addItemToListFromApp(listId) {
     const input = document.getElementById(`add-item-${listId}`);
     if (!input) return;
@@ -267,7 +279,10 @@ function renderLists() {
                             </div>
                         </div>
                     </div>
-                    <span class="list-toggle">▼</span>
+                    <div class="list-header-actions">
+                        ${completedItems > 0 ? `<button class="btn-clear-completed" onclick="event.stopPropagation(); clearCompleted('${list.id}')">🧹 Rensa klara</button>` : ''}
+                        <span class="list-toggle">▼</span>
+                    </div>
                 </div>
                 
                 <div class="list-items">
