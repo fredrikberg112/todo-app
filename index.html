@@ -153,6 +153,8 @@
             border-radius: 6px;
             font-size: 14px;
             cursor: pointer;
+            width: 100%;
+            margin-bottom: 16px;
         }
         .empty-state {
             text-align: center;
@@ -164,6 +166,20 @@
             padding: 40px;
             color: #00d4ff;
         }
+        .error {
+            text-align: center;
+            padding: 20px;
+            color: #ff006e;
+            background: #ff006e22;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        .last-updated {
+            text-align: center;
+            color: #555570;
+            font-size: 12px;
+            margin-bottom: 16px;
+        }
     </style>
 </head>
 <body>
@@ -171,94 +187,144 @@
         <h1>📝 Fredriks Lists</h1>
         <p class="subtitle">Synkade med Telegram</p>
         
+        <div id="error" style="display: none;"></div>
+        <button class="btn-refresh" onclick="loadFromServer()">
+            🔄 Ladda om
+        </button>
+        
+        <div id="last-updated" class="last-updated"></div>
+        
         <div id="summary" class="summary">
             <div class="loading">Laddar...</div>
-        </div>
-        
-        <div style="text-align: center; margin-bottom: 20px;">
-            <button class="btn-refresh" onclick="location.reload()">
-                🔄 Ladda om
-            </button>
         </div>
         
         <div id="lists"></div>
     </div>
 
     <script>
-        // ── DATA ──
-        const DATA_KEY = 'fredriks_lists_v1';
+        // ── CONFIG ──
+        // Use Mission Control server API
+        const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3333/api/todo'
+            : 'http://' + window.location.hostname + ':3333/api/todo';
+        
+        // Fallback to localStorage for offline use
+        const STORAGE_KEY = '***';
         
         let lists = {};
         let expanded = new Set(['handla']);
+        let lastUpdated = null;
         
         // ── INIT ──
         function init() {
             console.log('Initializing app...');
-            loadData();
-            render();
-            console.log('App initialized with lists:', Object.keys(lists));
+            console.log('API URL:', API_URL);
+            loadFromServer();
         }
         
-        // ── LOAD DATA ──
-        function loadData() {
+        // ── LOAD FROM SERVER ──
+        async function loadFromServer() {
+            showLoading(true);
+            hideError();
+            
             try {
-                // Try localStorage first
-                const saved = localStorage.getItem(DATA_KEY);
+                console.log('Fetching from server...');
+                const response = await fetch(API_URL + '?t=' + Date.now(), {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Server svarade: ' + response.status);
+                }
+                
+                const data = await response.json();
+                console.log('Loaded from server:', data);
+                
+                if (data && (data.handla || data.jobb || data.dagsplanering)) {
+                    lists = data;
+                    lastUpdated = new Date();
+                    saveToLocalStorage();
+                    render();
+                    showLastUpdated();
+                } else {
+                    throw new Error('Ogiltig data från server');
+                }
+            } catch (e) {
+                console.error('Kunde inte ladda från server:', e);
+                showError('Kunde inte nå servern. Använder sparad data. Se till att Mission Control är igång på din dator.');
+                loadFromLocalStorage();
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // ── SAVE TO SERVER ──
+        async function saveToServer() {
+            try {
+                console.log('Saving to server...');
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(lists)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Server svarade: ' + response.status);
+                }
+                
+                const result = await response.json();
+                console.log('Saved to server:', result);
+                lastUpdated = new Date();
+                saveToLocalStorage();
+                showLastUpdated();
+                return true;
+            } catch (e) {
+                console.error('Kunde inte spara till server:', e);
+                // Save to localStorage as fallback
+                saveToLocalStorage();
+                return false;
+            }
+        }
+        
+        // ── LOCAL STORAGE (fallback) ──
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(lists));
+                localStorage.setItem(STORAGE_KEY + '_time', lastUpdated ? lastUpdated.toISOString() : '');
+            } catch (e) {
+                console.error('Kunde inte spara till localStorage:', e);
+            }
+        }
+        
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                const savedTime = localStorage.getItem(STORAGE_KEY + '_time');
+                
                 if (saved) {
                     lists = JSON.parse(saved);
+                    if (savedTime) {
+                        lastUpdated = new Date(savedTime);
+                    }
                     console.log('Loaded from localStorage');
-                    return;
+                    render();
+                    showLastUpdated();
+                    return true;
                 }
             } catch (e) {
-                console.log('localStorage not available');
+                console.error('Kunde inte ladda från localStorage:', e);
             }
             
-            // Default data
-            lists = {
-                handla: {
-                    id: 'handla',
-                    name: 'Handla',
-                    icon: '🛒',
-                    color: '#00d4ff',
-                    items: [
-                        {id: 'h1', text: 'köttfärs', completed: false, createdAt: new Date().toISOString()},
-                        {id: 'h2', text: 'Ramlösa', completed: false, createdAt: new Date().toISOString()},
-                        {id: 'h3', text: 'melon', completed: false, createdAt: new Date().toISOString()}
-                    ]
-                },
-                jobb: {
-                    id: 'jobb',
-                    name: 'Jobb',
-                    icon: '💼',
-                    color: '#ffaa00',
-                    items: []
-                },
-                dagsplanering: {
-                    id: 'dagsplanering',
-                    name: 'Dagsplanering',
-                    icon: '📅',
-                    color: '#9d4edd',
-                    items: [
-                        {id: 'd1', text: 'Köra bil till 15:00', completed: false, createdAt: new Date().toISOString()},
-                        {id: 'd2', text: 'Vila 15:30-16:00', completed: false, createdAt: new Date().toISOString()},
-                        {id: 'd3', text: 'Plocka hemma', completed: false, createdAt: new Date().toISOString()},
-                        {id: 'd4', text: 'Hämta Mira på jobbet', completed: false, createdAt: new Date().toISOString()},
-                        {id: 'd5', text: 'Åk 17:00', completed: false, createdAt: new Date().toISOString()}
-                    ]
-                }
-            };
-            
-            saveData();
-            console.log('Created default lists');
-        }
-        
-        // ── SAVE DATA ──
-        function saveData() {
-            try {
-                localStorage.setItem(DATA_KEY, JSON.stringify(lists));
-            } catch (e) {
-                console.error('Could not save:', e);
-            }
+            // Show empty state if nothing found
+            lists = {};
+            render();
+            return false;
         }
         
         // ── RENDER ──
@@ -270,9 +336,10 @@
         
         function renderSummary() {
             const el = document.getElementById('summary');
-            const total = Object.values(lists).reduce((s, l) => s + l.items.length, 0);
-            const done = Object.values(lists).reduce((s, l) => s + l.items.filter(i => i.completed).length, 0);
-            const active = Object.values(lists).filter(l => l.items.length > 0).length;
+            const total = Object.values(lists).reduce((s, l) => s + (l.items ? l.items.length : 0), 0);
+            const done = Object.values(lists).reduce((s, l) => 
+                s + (l.items ? l.items.filter(i => i.completed).length : 0), 0);
+            const active = Object.values(lists).filter(l => l.items &> l.items.length > 0).length;
             
             el.innerHTML = `
                 <div class="stat">
@@ -292,18 +359,26 @@
         
         function renderLists() {
             const container = document.getElementById('lists');
+            
+            if (!lists || Object.keys(lists).length === 0) {
+                container.innerHTML = '<div class="empty-state">Inga listor tillgängliga. Klicka på "Ladda om" för att hämta data.</div>';
+                return;
+            }
+            
             container.innerHTML = Object.values(lists).map(list => {
-                const done = list.items.filter(i => i.completed).length;
+                if (!list) return '';
+                const done = list.items ? list.items.filter(i => i.completed).length : 0;
+                const total = list.items ? list.items.length : 0;
                 const isOpen = expanded.has(list.id);
                 
                 return `
                     <div class="list-card">
                         <div class="list-header" onclick="toggleList('${list.id}')">
                             <div class="list-title">
-                                <div class="list-icon">${list.icon}</div>
+                                <div class="list-icon">${list.icon || '📝'}</div>
                                 <div>
-                                    <div class="list-name">${list.name}</div>
-                                    <div class="list-meta">${done}/${list.items.length} klara</div>
+                                    <div class="list-name">${list.name || list.id}</div>
+                                    <div class="list-meta">${done}/${total} klara</div>
                                 </div>
                             </div>
                             <span class="toggle-btn">${isOpen ? '▲' : '▼'}</span>
@@ -311,7 +386,7 @@
                         
                         ${isOpen ? `
                             <div class="list-items">
-                                ${list.items.length === 0 ? `
+                                ${!list.items || list.items.length === 0 ? `
                                     <div class="empty-state">Inga items än</div>
                                 ` : list.items.map(item => `
                                     <div class="todo-item ${item.completed ? 'completed' : ''}">
@@ -346,28 +421,62 @@
             renderLists();
         };
         
-        window.toggleItem = function(listId, itemId) {
+        window.toggleItem = async function(listId, itemId) {
+            if (!lists[listId] || !lists[listId].items) return;
+            
             const item = lists[listId].items.find(i => i.id === itemId);
             if (item) {
                 item.completed = !item.completed;
-                saveData();
+                await saveToServer();
                 render();
             }
         };
         
-        window.clearCompleted = function(listId) {
+        window.clearCompleted = async function(listId) {
+            if (!lists[listId] || !lists[listId].items) return;
+            
             const list = lists[listId];
             const done = list.items.filter(i => i.completed);
             if (done.length === 0) return;
             
             if (confirm(`Rensa ${done.length} avbockade items?`)) {
                 list.items = list.items.filter(i => !i.completed);
-                saveData();
+                await saveToServer();
                 render();
             }
         };
         
-        // ── HELPERS ──
+        window.loadFromServer = loadFromServer;
+        
+        // ── UI HELPERS ──
+        function showLoading(show) {
+            const el = document.getElementById('summary');
+            if (show) {
+                el.innerHTML = '<div class="loading">Laddar...</div>';
+            }
+        }
+        
+        function showError(message) {
+            const el = document.getElementById('error');
+            el.innerHTML = '<div class="error">⚠️ ' + escapeHtml(message) + '</div>';
+            el.style.display = 'block';
+        }
+        
+        function hideError() {
+            const el = document.getElementById('error');
+            el.style.display = 'none';
+        }
+        
+        function showLastUpdated() {
+            const el = document.getElementById('last-updated');
+            if (lastUpdated) {
+                const time = lastUpdated.toLocaleTimeString('sv-SE', {hour: '2-digit', minute:'2-digit'});
+                el.textContent = 'Senast uppdaterad: ' + time;
+            } else {
+                el.textContent = '';
+            }
+        }
+        
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
