@@ -1,0 +1,95 @@
+{
+  "handla": {
+    "id": "handla",
+    "name": "Handla",
+    "icon": "🛒",
+    "color": "#00d4ff",
+    "items": [
+      {
+        "id": "mpuxn29x4lely",
+        "text": "mjölk bröd morot",
+        "completed": false,
+        "createdAt": "2026-06-01T08:14:17.157Z",
+        "completedAt": null
+      },
+      {
+        "id": "mpuxn2a19ee2r",
+        "text": "mjölk",
+        "completed": false,
+        "createdAt": "2026-06-01T08:14:17.161Z",
+        "completedAt": null
+      },
+      {
+        "id": "mpuxn2a2sgmbj",
+        "text": "ägg smör",
+        "completed": false,
+        "createdAt": "2026-06-01T08:14:17.162Z",
+        "completedAt": null
+      },
+      {
+        "id": "mpuzdf42ayomt",
+        "text": "monster",
+        "completed": false,
+        "createdAt": "2026-06-01T09:02:46.466Z",
+        "completedAt": null
+      },
+      {
+        "id": "mpuzdf43itier",
+        "text": "bröd",
+        "completed": false,
+        "createdAt": "2026-06-01T09:02:46.467Z",
+        "completedAt": null
+      },
+      {
+        "id": "mpv19jxhm4ng6",
+        "text": "mjöl",
+        "completed": false,
+        "createdAt": "2026-06-01T09:55:45.317Z",
+        "completedAt": null
+      },
+      {
+        "id": "mpv19jxirlm5o",
+        "text": "ägg",
+        "completed": false,
+        "createdAt": "2026-06-01T09:55:45.318Z",
+        "completedAt": null
+      }
+    ],
+    "createdAt": "2026-06-01T08:14:17.156Z",
+    "updatedAt": "2026-06-01T09:55:45.318Z"
+  },
+  "jobb": {
+    "id": "jobb",
+    "name": "Jobb",
+    "icon": "💼",
+    "color": "#ffaa00",
+    "items": [
+      {
+        "id": "mpuxn29z9k0ha",
+        "text": "ring kundservice kl 10",
+        "completed": false,
+        "createdAt": "2026-06-01T08:14:17.159Z",
+        "completedAt": null
+      }
+    ],
+    "createdAt": "2026-06-01T08:14:17.157Z",
+    "updatedAt": "2026-06-01T08:14:17.159Z"
+  },
+  "dagsplanering": {
+    "id": "dagsplanering",
+    "name": "Dagsplanering",
+    "icon": "📅",
+    "color": "#9d4edd",
+    "items": [
+      {
+        "id": "mpuxn2a0kr0qq",
+        "text": "hämta pojkarna kl 16",
+        "completed": false,
+        "createdAt": "2026-06-01T08:14:17.160Z",
+        "completedAt": null
+      }
+    ],
+    "createdAt": "2026-06-01T08:14:17.157Z",
+    "updatedAt": "2026-06-01T08:14:17.160Z"
+  }
+}
