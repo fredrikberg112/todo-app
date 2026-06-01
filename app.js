@@ -9,11 +9,30 @@ const EMBEDDED_LISTS = {
         "icon": "🛒",
         "color": "#00d4ff",
         "items": [
-            {"id": "test1", "text": "test1", "completed": false, "createdAt": "2026-06-01T11:25:46.257Z", "completedAt": null},
-            {"id": "test2", "text": "test2", "completed": false, "createdAt": "2026-06-01T11:25:46.257Z", "completedAt": null}
+            {
+                "id": "m1",
+                "text": "monster",
+                "completed": false,
+                "createdAt": "2026-06-01T12:58:26.717Z",
+                "completedAt": null
+            },
+            {
+                "id": "m2",
+                "text": "mjölk",
+                "completed": false,
+                "createdAt": "2026-06-01T12:58:26.718Z",
+                "completedAt": null
+            },
+            {
+                "id": "m3",
+                "text": "bröd",
+                "completed": false,
+                "createdAt": "2026-06-01T12:58:26.718Z",
+                "completedAt": null
+            }
         ],
         "createdAt": "2026-06-01T08:14:17.156Z",
-        "updatedAt": "2026-06-01T11:25:46.257Z"
+        "updatedAt": "2026-06-01T12:58:26.718Z"
     },
     "jobb": {
         "id": "jobb",
