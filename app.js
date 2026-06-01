@@ -1,6 +1,7 @@
 // ── CONFIG ──
-const GITHUB_REPO = 'fredrikberg112/todo-app';
-const GITHUB_TOKEN = localStorage.getItem('github_token') || '';
+const API_BASE = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3333/api' 
+    : 'http://192.168.0.235:3333/api';
 const DATA_BRANCH = 'main';
 const LISTS_PATH = 'lists.json';
 
@@ -42,7 +43,7 @@ let listsSha = null; // GitHub SHA for lists.json
 
 // ── INIT ──
 function init() {
-    loadListsFromGitHub();
+    loadListsFromServer();
     setupEventListeners();
 }
 
@@ -52,20 +53,20 @@ function setupEventListeners() {
     });
 }
 
-// ── GITHUB SYNC ──
-async function loadListsFromGitHub() {
+// ── SYNC ──
+async function loadListsFromServer() {
     try {
         showLoading(true);
-        const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/${DATA_BRANCH}/${LISTS_PATH}?t=${Date.now()}`);
+        const response = await fetch(`${API_BASE}/todo`);
         if (response.ok) {
             const data = await response.json();
             lists = data;
-            console.log('✅ Loaded lists from GitHub');
+            console.log('✅ Loaded lists from server');
         } else {
             throw new Error('Failed to load');
         }
     } catch (e) {
-        console.log('⚠️ Could not load from GitHub, using defaults');
+        console.log('⚠️ Could not load from server, using defaults');
         lists = JSON.parse(JSON.stringify(defaultLists));
     }
     render();
@@ -73,58 +74,24 @@ async function loadListsFromGitHub() {
     showLoading(false);
 }
 
-async function saveListsToGitHub() {
-    if (!GITHUB_TOKEN) {
-        console.log('⚠️ No GitHub token, saving to localStorage only');
-        localStorage.setItem('fredriks_lists', JSON.stringify(lists));
-        return;
-    }
-    
+async function saveListsToServer() {
     try {
         showLoading(true);
-        
-        // Get current SHA if we don't have it
-        if (!listsSha) {
-            const metaRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${LISTS_PATH}?ref=${DATA_BRANCH}`, {
-                headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
-                    'User-Agent': 'TodoApp'
-                }
-            });
-            if (metaRes.ok) {
-                const meta = await metaRes.json();
-                listsSha = meta.sha;
-            }
-        }
-        
-        // Upload updated lists.json
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(lists, null, 2))));
-        const body = {
-            message: 'Update lists from app',
-            content: content,
-            branch: DATA_BRANCH,
-            sha: listsSha
-        };
-        
-        const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${LISTS_PATH}`, {
-            method: 'PUT',
+        const response = await fetch(`${API_BASE}/todo`, {
+            method: 'POST',
             headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Content-Type': 'application/json',
-                'User-Agent': 'TodoApp'
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(lists)
         });
         
-        if (res.ok) {
-            const result = await res.json();
-            listsSha = result.content.sha;
-            console.log('✅ Saved to GitHub');
+        if (response.ok) {
+            console.log('✅ Saved to server');
         } else {
             throw new Error('Failed to save');
         }
     } catch (e) {
-        console.error('❌ GitHub save failed:', e);
+        console.error('❌ Server save failed:', e);
         // Fallback to localStorage
         localStorage.setItem('fredriks_lists', JSON.stringify(lists));
     } finally {
@@ -152,7 +119,7 @@ function loadListsFallback() {
 
 function saveLists() {
     updateSummary();
-    saveListsToGitHub();
+    saveListsToServer();
 }
 
 // ── ADD ITEMS ──
