@@ -1,6 +1,8 @@
 // ── CONFIG ──
 const GITHUB_REPO = 'fredrikberg112/todo-app';
-const GITHUB_TOKEN = localStorage.getItem('github_token') || '';
+const GITHUB_TOKEN = '';
+const DATA_BRANCH = 'main';
+const LISTS_PATH = 'lists.json';
 
 // ── DEFAULT LISTS ──
 const defaultLists = {
@@ -36,13 +38,12 @@ const defaultLists = {
 // ── STATE ──
 let lists = {};
 let expandedLists = new Set(['handla']);
+let listsSha = null; // GitHub SHA for lists.json
 
 // ── INIT ──
 function init() {
-    loadLists();
-    render();
+    loadListsFromGitHub();
     setupEventListeners();
-    updateSummary();
 }
 
 function setupEventListeners() {
@@ -51,21 +52,107 @@ function setupEventListeners() {
     });
 }
 
-// ── LOCAL STORAGE ──
-function loadLists() {
+// ── GITHUB SYNC ──
+async function loadListsFromGitHub() {
+    try {
+        showLoading(true);
+        const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_REPO}/${DATA_BRANCH}/${LISTS_PATH}?t=${Date.now()}`);
+        if (response.ok) {
+            const data = await response.json();
+            lists = data;
+            console.log('✅ Loaded lists from GitHub');
+        } else {
+            throw new Error('Failed to load');
+        }
+    } catch (e) {
+        console.log('⚠️ Could not load from GitHub, using defaults');
+        lists = JSON.parse(JSON.stringify(defaultLists));
+    }
+    render();
+    updateSummary();
+    showLoading(false);
+}
+
+async function saveListsToGitHub() {
+    if (!GITHUB_TOKEN) {
+        console.log('⚠️ No GitHub token, saving to localStorage only');
+        localStorage.setItem('fredriks_lists', JSON.stringify(lists));
+        return;
+    }
+    
+    try {
+        showLoading(true);
+        
+        // Get current SHA if we don't have it
+        if (!listsSha) {
+            const metaRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${LISTS_PATH}?ref=${DATA_BRANCH}`, {
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'User-Agent': 'TodoApp'
+                }
+            });
+            if (metaRes.ok) {
+                const meta = await metaRes.json();
+                listsSha = meta.sha;
+            }
+        }
+        
+        // Upload updated lists.json
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(lists, null, 2))));
+        const body = {
+            message: 'Update lists from app',
+            content: content,
+            branch: DATA_BRANCH,
+            sha: listsSha
+        };
+        
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${LISTS_PATH}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json',
+                'User-Agent': 'TodoApp'
+            },
+            body: JSON.stringify(body)
+        });
+        
+        if (res.ok) {
+            const result = await res.json();
+            listsSha = result.content.sha;
+            console.log('✅ Saved to GitHub');
+        } else {
+            throw new Error('Failed to save');
+        }
+    } catch (e) {
+        console.error('❌ GitHub save failed:', e);
+        // Fallback to localStorage
+        localStorage.setItem('fredriks_lists', JSON.stringify(lists));
+    } finally {
+        showLoading(false);
+    }
+}
+
+function showLoading(show) {
+    const btn = document.getElementById('save-indicator');
+    if (btn) {
+        btn.textContent = show ? '💾 Sparar...' : '';
+        btn.style.display = show ? 'inline' : 'none';
+    }
+}
+
+// ── LOCAL STORAGE (fallback) ──
+function loadListsFallback() {
     const saved = localStorage.getItem('fredriks_lists');
     if (saved) {
         lists = JSON.parse(saved);
     } else {
         lists = JSON.parse(JSON.stringify(defaultLists));
-        saveLists();
     }
 }
 
 function saveLists() {
-    localStorage.setItem('fredriks_lists', JSON.stringify(lists));
     updateSummary();
-    // TODO: Sync to GitHub
+    saveListsToGitHub();
 }
 
 // ── ADD ITEMS ──
