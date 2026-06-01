@@ -1,9 +1,5 @@
 // ── CONFIG ──
-const API_BASE = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3333/api' 
-    : 'http://192.168.0.235:3333/api';
-const DATA_BRANCH = 'main';
-const LISTS_PATH = 'lists.json';
+const STORAGE_KEY = 'fredriks_lists_v2';
 
 // ── DEFAULT LISTS ──
 const defaultLists = {
@@ -39,95 +35,62 @@ const defaultLists = {
 // ── STATE ──
 let lists = {};
 let expandedLists = new Set(['handla']);
-let listsSha = null; // GitHub SHA for lists.json
 
 // ── INIT ──
 function init() {
-    loadListsFromServer();
+    loadLists();
+    render();
     setupEventListeners();
+    updateSummary();
 }
 
 function setupEventListeners() {
-    document.getElementById('quick-add-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') addFromInput();
-    });
-}
-
-// ── SYNC ──
-async function loadListsFromServer() {
-    try {
-        showLoading(true);
-        const response = await fetch(`${API_BASE}/todo`);
-        if (response.ok) {
-            const data = await response.json();
-            lists = data;
-            console.log('✅ Loaded lists from server');
-        } else {
-            throw new Error('Failed to load');
-        }
-    } catch (e) {
-        console.log('⚠️ Could not load from server, using defaults');
-        lists = JSON.parse(JSON.stringify(defaultLists));
-    }
-    render();
-    updateSummary();
-    showLoading(false);
-}
-
-async function saveListsToServer() {
-    try {
-        showLoading(true);
-        const response = await fetch(`${API_BASE}/todo`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(lists)
+    const input = document.getElementById('quick-add-input');
+    if (input) {
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addFromInput();
         });
-        
-        if (response.ok) {
-            console.log('✅ Saved to server');
+    }
+}
+
+// ── LOCAL STORAGE ──
+function loadLists() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            lists = JSON.parse(saved);
+            // Ensure all lists exist
+            Object.keys(defaultLists).forEach(key => {
+                if (!lists[key]) {
+                    lists[key] = JSON.parse(JSON.stringify(defaultLists[key]));
+                }
+            });
         } else {
-            throw new Error('Failed to save');
+            lists = JSON.parse(JSON.stringify(defaultLists));
+            saveLists();
         }
     } catch (e) {
-        console.error('❌ Server save failed:', e);
-        // Fallback to localStorage
-        localStorage.setItem('fredriks_lists', JSON.stringify(lists));
-    } finally {
-        showLoading(false);
-    }
-}
-
-function showLoading(show) {
-    const btn = document.getElementById('save-indicator');
-    if (btn) {
-        btn.textContent = show ? '💾 Sparar...' : '';
-        btn.style.display = show ? 'inline' : 'none';
-    }
-}
-
-// ── LOCAL STORAGE (fallback) ──
-function loadListsFallback() {
-    const saved = localStorage.getItem('fredriks_lists');
-    if (saved) {
-        lists = JSON.parse(saved);
-    } else {
+        console.error('Error loading lists:', e);
         lists = JSON.parse(JSON.stringify(defaultLists));
     }
 }
 
 function saveLists() {
-    updateSummary();
-    saveListsToServer();
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(lists));
+        updateSummary();
+    } catch (e) {
+        console.error('Error saving lists:', e);
+    }
 }
 
 // ── ADD ITEMS ──
 function addFromInput() {
     const input = document.getElementById('quick-add-input');
     const selector = document.getElementById('list-selector');
-    const text = input.value.trim();
+    if (!input || !selector) return;
     
+    const text = input.value.trim();
     if (!text) return;
     
     const listId = selector.value;
@@ -152,7 +115,6 @@ function addItem(listId, text) {
     );
     
     if (existing) {
-        // Already exists and not done - don't add duplicate
         return false;
     }
     
@@ -335,76 +297,6 @@ function formatTime(isoString) {
     return `${diffDays}d`;
 }
 
-// ── TELEGRAM INTEGRATION ──
-// This function is called from the Telegram bridge
-function processTelegramMessage(message) {
-    // Expected format: "handla mjölk bröd morot" or "jobb ring kundservice"
-    const words = message.toLowerCase().split(/\s+/);
-    
-    // Map first word to list ID
-    const listMap = {
-        'handla': 'handla',
-        'köp': 'handla',
-        'köpa': 'handla',
-        'shop': 'handla',
-        'jobb': 'jobb',
-        'arbete': 'jobb',
-        'work': 'jobb',
-        'idag': 'dagsplanering',
-        'idag:': 'dagsplanering',
-        'dagsplan': 'dagsplanering',
-        'plan': 'dagsplanering',
-        'fredag': 'dagsplanering',
-        'lördag': 'dagsplanering',
-        'söndag': 'dagsplanering'
-    };
-    
-    let targetList = null;
-    let itemText = message;
-    
-    // Check if first word maps to a list
-    if (words.length > 1 && listMap[words[0]]) {
-        targetList = listMap[words[0]];
-        itemText = words.slice(1).join(' ');
-    }
-    
-    // If no list specified, default to handla for shopping-like items
-    if (!targetList) {
-        const shoppingWords = ['mjölk', 'bröd', 'ägg', 'smör', 'pasta', 'ris', 'kaffe', 'te', 'frukt', 'grönsaker', 'kött', 'fisk'];
-        const hasShoppingWords = shoppingWords.some(sw => message.toLowerCase().includes(sw));
-        if (hasShoppingWords) {
-            targetList = 'handla';
-        }
-    }
-    
-    // Add items
-    const items = itemText.split(/[,;]/).map(s => s.trim()).filter(s => s);
-    let added = 0;
-    
-    items.forEach(item => {
-        if (addItem(targetList || 'handla', item)) {
-            added++;
-        }
-    });
-    
-    saveLists();
-    render();
-    
-    return {
-        success: true,
-        added: added,
-        list: targetList || 'handla',
-        items: items
-    };
-}
-
-// ── GITHUB SYNC (placeholder) ──
-async function syncToGitHub() {
-    // TODO: Implement GitHub Pages sync
-    console.log('Syncing to GitHub...');
-    // Would need GitHub token and API calls
-}
-
 // ── INIT ──
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
@@ -412,10 +304,10 @@ if (document.readyState === 'loading') {
     init();
 }
 
-// Expose functions globally for testing
+// Expose functions globally
 window.addFromInput = addFromInput;
 window.toggleItem = toggleItem;
 window.deleteItem = deleteItem;
 window.toggleList = toggleList;
 window.addItemToListFromApp = addItemToListFromApp;
-window.processTelegramMessage = processTelegramMessage;
+window.clearCompleted = clearCompleted;
