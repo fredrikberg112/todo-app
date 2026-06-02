@@ -5,40 +5,28 @@
     "icon": "🛒",
     "color": "#00d4ff",
     "items": [
-      {
-        "id": "test1",
-        "text": "test1",
-        "completed": false,
-        "createdAt": "2026-06-01T11:25:46.257Z",
-        "completedAt": null
-      },
-      {
-        "id": "test2",
-        "text": "test2",
-        "completed": false,
-        "createdAt": "2026-06-01T11:25:46.257Z",
-        "completedAt": null
-      }
-    ],
-    "createdAt": "2026-06-01T08:14:17.156Z",
-    "updatedAt": "2026-06-01T11:25:46.257Z"
+      {"id": "h1", "text": "test3", "completed": false, "createdAt": "2026-06-02T09:00:00Z"},
+      {"id": "h2", "text": "test4", "completed": false, "createdAt": "2026-06-02T09:00:00Z"}
+    ]
   },
   "jobb": {
     "id": "jobb",
     "name": "Jobb",
     "icon": "💼",
     "color": "#ffaa00",
-    "items": [],
-    "createdAt": "2026-06-01T08:14:17.157Z",
-    "updatedAt": "2026-06-01T11:25:46.257Z"
+    "items": []
   },
   "dagsplanering": {
     "id": "dagsplanering",
     "name": "Dagsplanering",
     "icon": "📅",
     "color": "#9d4edd",
-    "items": [],
-    "createdAt": "2026-06-01T08:14:17.157Z",
-    "updatedAt": "2026-06-01T11:25:46.257Z"
+    "items": [
+      {"id": "d1", "text": "Köra bil till 15:00", "completed": false, "createdAt": "2026-06-01T12:00:00Z"},
+      {"id": "d2", "text": "Vila 15:30-16:00", "completed": false, "createdAt": "2026-06-01T12:00:00Z"},
+      {"id": "d3", "text": "Plocka hemma", "completed": false, "createdAt": "2026-06-01T12:00:00Z"},
+      {"id": "d4", "text": "Hämta Mira på jobbet", "completed": false, "createdAt": "2026-06-01T12:00:00Z"},
+      {"id": "d5", "text": "Åk 17:00", "completed": false, "createdAt": "2026-06-01T12:00:00Z"}
+    ]
   }
 }
