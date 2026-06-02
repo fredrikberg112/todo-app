@@ -83,13 +83,14 @@
 
     <script>
         // ── CONFIG ──
-        const STORAGE_KEY = '***';
+        const STORAGE_KEY = 'fredriks_lists_v1';
+        const GITHUB_URL = 'https://raw.githubusercontent.com/fredrikberg112/todo-app/main/lists.json';
         
         let lists = {};
         let expanded = new Set(['handla']);
         let lastUpdated = null;
         
-        // ── DEFAULT DATA (uppdateras av Bosse via GitHub) ──
+        // ── DEFAULT DATA ──
         const DEFAULT_DATA = {
             handla: {
                 id: 'handla', name: 'Handla', icon: '🛒', color: '#00d4ff',
@@ -121,15 +122,15 @@
             render();
         }
         
-        // ── FORCE UPDATE (när Bosse uppdaterat via GitHub) ──
+        // ── FORCE UPDATE ──
         async function forceUpdate() {
             showLoading(true);
             hideError();
             
             try {
-                // Försök hämta från GitHub med cache-busting
+                // Cache-busting: lägg till slumpmässig query parameter
                 const timestamp = new Date().getTime();
-                const url = 'https://raw.githubusercontent.com/fredrikberg112/todo-app/main/lists.json?t=' + timestamp;
+                const url = GITHUB_URL + '?t=' + timestamp;
                 
                 console.log('Hämtar från GitHub:', url);
                 
@@ -137,7 +138,8 @@
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
-                        'Cache-Control': 'no-cache'
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache'
                     }
                 });
                 
@@ -152,7 +154,7 @@
                 console.log('Parsad data:', data);
                 
                 if (data && data.handla) {
-                    // BEVARA användarens avbockningar!
+                    // BEVARA användarens avbockningar
                     preserveUserProgress(data);
                     
                     lists = data;
@@ -181,13 +183,11 @@
             try {
                 const oldData = JSON.parse(saved);
                 
-                // För varje lista, bevara avbockade items
                 for (let listId in newData) {
                     if (oldData[listId] && oldData[listId].items) {
                         const oldItems = oldData[listId].items;
                         const newItems = newData[listId].items || [];
                         
-                        // Markera items som completed om de var det tidigare
                         newItems.forEach(newItem => {
                             const oldItem = oldItems.find(i => i.text === newItem.text);
                             if (oldItem && oldItem.completed) {
@@ -246,7 +246,7 @@
             const total = Object.values(lists).reduce((s, l) => s + (l.items ? l.items.length : 0), 0);
             const done = Object.values(lists).reduce((s, l) => 
                 s + (l.items ? l.items.filter(i => i.completed).length : 0), 0);
-            const active = Object.values(lists).filter(l => l.items &> l.items.length > 0).length;
+            const active = Object.values(lists).filter(l => l.items && l.items.length > 0).length;
             
             el.innerHTML = `
                 <div class="stat">
