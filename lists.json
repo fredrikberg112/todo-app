@@ -10,13 +10,6 @@
       {"id": "h3", "text": "melon", "completed": false, "createdAt": "2026-06-02T14:30:00Z"}
     ]
   },
-  "jobb": {
-    "id": "jobb",
-    "name": "Jobb",
-    "icon": "💼",
-    "color": "#ffaa00",
-    "items": []
-  },
   "dagsplanering": {
     "id": "dagsplanering",
     "name": "Dagsplanering",
