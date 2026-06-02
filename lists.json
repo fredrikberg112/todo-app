@@ -4,21 +4,13 @@
     "name": "Handla",
     "icon": "🛒",
     "color": "#00d4ff",
-    "items": [
-      {"id": "h1", "text": "köttfärs", "completed": false, "createdAt": "2026-06-02T14:30:00Z"},
-      {"id": "h2", "text": "Ramlösa", "completed": false, "createdAt": "2026-06-02T14:30:00Z"},
-      {"id": "h3", "text": "melon", "completed": false, "createdAt": "2026-06-02T14:30:00Z"}
-    ]
+    "items": []
   },
   "dagsplanering": {
     "id": "dagsplanering",
     "name": "Dagsplanering",
     "icon": "📅",
     "color": "#9d4edd",
-    "items": [
-      {"id": "d1", "text": "Kolla upp tårtor", "completed": false, "createdAt": "2026-06-02T14:30:00Z"},
-      {"id": "d2", "text": "Maila polisen", "completed": false, "createdAt": "2026-06-02T14:30:00Z"},
-      {"id": "d3", "text": "Beställ bröd", "completed": false, "createdAt": "2026-06-02T14:30:00Z"}
-    ]
+    "items": []
   }
 }
