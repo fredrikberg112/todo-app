@@ -4,7 +4,19 @@
     "name": "Handla",
     "icon": "🛒",
     "color": "#00d4ff",
-    "items": []
+    "items": [
+      { "id": "1", "text": "Blåbär", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null },
+      { "id": "2", "text": "Hallon", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null },
+      { "id": "3", "text": "Bebisgröt", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null },
+      { "id": "4", "text": "Ostkaka", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null },
+      { "id": "5", "text": "Monster", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null },
+      { "id": "6", "text": "Red Bull", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null },
+      { "id": "7", "text": "Maizena", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null },
+      { "id": "8", "text": "Ostronsås", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null },
+      { "id": "9", "text": "Lövbiff", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null },
+      { "id": "10", "text": "Purjolök", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null },
+      { "id": "11", "text": "Vitlök", "completed": false, "createdAt": "2026-06-04T11:30:00.000Z", "completedAt": null }
+    ]
   },
   "dagsplanering": {
     "id": "dagsplanering",
