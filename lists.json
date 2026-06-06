@@ -5,84 +5,22 @@
     "icon": "🛒",
     "color": "#00d4ff",
     "items": [
-      {
-        "id": "1",
-        "text": "Köttfärs",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      },
-      {
-        "id": "2",
-        "text": "Läsk",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      },
-      {
-        "id": "3",
-        "text": "Nacho",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      },
-      {
-        "id": "4",
-        "text": "Taco krydda",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      },
-      {
-        "id": "5",
-        "text": "Isberg",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      },
-      {
-        "id": "6",
-        "text": "Tomat",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      },
-      {
-        "id": "7",
-        "text": "Gurka",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      },
-      {
-        "id": "8",
-        "text": "Skogaholms limpa",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      },
-      {
-        "id": "9",
-        "text": "Jordgubbar",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      },
-      {
-        "id": "10",
-        "text": "Hallon",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      },
-      {
-        "id": "11",
-        "text": "Blåbär",
-        "completed": false,
-        "createdAt": "2026-06-05T13:05:00.000Z",
-        "completedAt": null
-      }
+      {"id": "h1", "text": "Hamburgerbröd", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
+      {"id": "h2", "text": "Hamburgerost", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
+      {"id": "h3", "text": "Fryst Hamburgare", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
+      {"id": "h4", "text": "Bifftomat", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
+      {"id": "h5", "text": "Jordgubbar", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
+      {"id": "h6", "text": "Hallon", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
+      {"id": "h7", "text": "Blåbär", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
+      {"id": "h8", "text": "Monster energidryck", "completed": false, "createdAt": "2026-06-06T16:00:00Z"}
     ]
+  },
+  "jobb": {
+    "id": "jobb",
+    "name": "Jobb",
+    "icon": "💼",
+    "color": "#ffaa00",
+    "items": []
   },
   "dagsplanering": {
     "id": "dagsplanering",
