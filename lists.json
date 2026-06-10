@@ -5,20 +5,11 @@
     "icon": "🛒",
     "color": "#00d4ff",
     "items": [
-      {"id": "h1", "text": "Hamburgerbröd", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
-      {"id": "h2", "text": "Hamburgerost", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
-      {"id": "h3", "text": "Fryst Hamburgare", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
-      {"id": "h4", "text": "Bifftomat", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
-      {"id": "h5", "text": "Jordgubbar", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
-      {"id": "h6", "text": "Hallon", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
-      {"id": "h7", "text": "Blåbär", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
-      {"id": "h8", "text": "Monster energidryck", "completed": false, "createdAt": "2026-06-06T16:00:00Z"},
-      {"id": "h9", "text": "Tandkräm", "completed": false, "createdAt": "2026-06-08T20:45:00Z"},
-      {"id": "h10", "text": "Barntandkräm", "completed": false, "createdAt": "2026-06-08T20:45:00Z"},
-      {"id": "h11", "text": "Tandborstar", "completed": false, "createdAt": "2026-06-08T20:45:00Z"},
-      {"id": "h12", "text": "Mjölk", "completed": false, "createdAt": "2026-06-08T20:45:00Z"},
-      {"id": "h13", "text": "Juice", "completed": false, "createdAt": "2026-06-08T20:45:00Z"},
-      {"id": "h14", "text": "Middag?", "completed": false, "createdAt": "2026-06-08T20:45:00Z"}
+      {"id": "h1", "text": "Socker", "completed": false, "createdAt": "2026-06-10T07:30:00Z"},
+      {"id": "h2", "text": "Juice", "completed": false, "createdAt": "2026-06-10T07:30:00Z"},
+      {"id": "h3", "text": "Bär", "completed": false, "createdAt": "2026-06-10T07:30:00Z"},
+      {"id": "h4", "text": "Yoghurt", "completed": false, "createdAt": "2026-06-10T07:30:00Z"},
+      {"id": "h5", "text": "Banan", "completed": false, "createdAt": "2026-06-10T07:30:00Z"}
     ]
   },
   "jobb": {
