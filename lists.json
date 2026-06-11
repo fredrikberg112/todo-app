@@ -22,8 +22,15 @@
   "dagsplanering": {
     "id": "dagsplanering",
     "name": "Dagsplanering",
-    "icon": "📅",
+    "icon": "📋",
     "color": "#9d4edd",
-    "items": []
+    "items": [
+      {"id": "d1", "text": "Rc fram till 13:30", "completed": false, "createdAt": "2026-06-11T08:44:00Z"},
+      {"id": "d2", "text": "Bädda om sängar", "completed": false, "createdAt": "2026-06-11T08:44:00Z"},
+      {"id": "d3", "text": "Plocka", "completed": false, "createdAt": "2026-06-11T08:44:00Z"},
+      {"id": "d4", "text": "Dammsug", "completed": false, "createdAt": "2026-06-11T08:44:00Z"},
+      {"id": "d5", "text": "Vila", "completed": false, "createdAt": "2026-06-11T08:44:00Z"},
+      {"id": "d6", "text": "Hämta pojkarna kl 16", "completed": false, "createdAt": "2026-06-11T08:44:00Z"}
+    ]
   }
 }
