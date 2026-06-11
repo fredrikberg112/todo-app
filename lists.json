@@ -11,7 +11,9 @@
       {"id": "h4", "text": "Blåbär", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
       {"id": "h5", "text": "Hallon", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
       {"id": "h6", "text": "Potatisbullar", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
-      {"id": "h7", "text": "Hallonsylt", "completed": false, "createdAt": "2026-06-11T13:00:00Z"}
+      {"id": "h7", "text": "Hallonsylt", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
+      {"id": "h8", "text": "Limpa", "completed": false, "createdAt": "2026-06-11T13:22:00Z"},
+      {"id": "h9", "text": "Bregott", "completed": false, "createdAt": "2026-06-11T13:22:00Z"}
     ]
   },
   "jobb": {
