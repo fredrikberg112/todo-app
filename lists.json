@@ -5,11 +5,13 @@
     "icon": "🛒",
     "color": "#00d4ff",
     "items": [
-      {"id": "h1", "text": "Socker", "completed": false, "createdAt": "2026-06-10T07:30:00Z"},
-      {"id": "h2", "text": "Juice", "completed": false, "createdAt": "2026-06-10T07:30:00Z"},
-      {"id": "h3", "text": "Bär", "completed": false, "createdAt": "2026-06-10T07:30:00Z"},
-      {"id": "h4", "text": "Yoghurt", "completed": false, "createdAt": "2026-06-10T07:30:00Z"},
-      {"id": "h5", "text": "Banan", "completed": false, "createdAt": "2026-06-10T07:30:00Z"}
+      {"id": "h1", "text": "Krossade tomater", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
+      {"id": "h2", "text": "Monster", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
+      {"id": "h3", "text": "Red Bull", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
+      {"id": "h4", "text": "Blåbär", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
+      {"id": "h5", "text": "Hallon", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
+      {"id": "h6", "text": "Potatisbullar", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
+      {"id": "h7", "text": "Hallonsylt", "completed": false, "createdAt": "2026-06-11T13:00:00Z"}
     ]
   },
   "jobb": {
