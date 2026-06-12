@@ -4,17 +4,7 @@
     "name": "Handla",
     "icon": "🛒",
     "color": "#00d4ff",
-    "items": [
-      {"id": "h1", "text": "Krossade tomater", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
-      {"id": "h2", "text": "Monster", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
-      {"id": "h3", "text": "Red Bull", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
-      {"id": "h4", "text": "Blåbär", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
-      {"id": "h5", "text": "Hallon", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
-      {"id": "h6", "text": "Potatisbullar", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
-      {"id": "h7", "text": "Hallonsylt", "completed": false, "createdAt": "2026-06-11T13:00:00Z"},
-      {"id": "h8", "text": "Limpa", "completed": false, "createdAt": "2026-06-11T13:22:00Z"},
-      {"id": "h9", "text": "Bregott", "completed": false, "createdAt": "2026-06-11T13:22:00Z"}
-    ]
+    "items": []
   },
   "jobb": {
     "id": "jobb",
@@ -26,15 +16,8 @@
   "dagsplanering": {
     "id": "dagsplanering",
     "name": "Dagsplanering",
-    "icon": "📋",
+    "icon": "📅",
     "color": "#9d4edd",
-    "items": [
-      {"id": "d1", "text": "Rc fram till 13:30", "completed": false, "createdAt": "2026-06-11T08:44:00Z"},
-      {"id": "d2", "text": "Bädda om sängar", "completed": false, "createdAt": "2026-06-11T08:44:00Z"},
-      {"id": "d3", "text": "Plocka", "completed": false, "createdAt": "2026-06-11T08:44:00Z"},
-      {"id": "d4", "text": "Dammsug", "completed": false, "createdAt": "2026-06-11T08:44:00Z"},
-      {"id": "d5", "text": "Vila", "completed": false, "createdAt": "2026-06-11T08:44:00Z"},
-      {"id": "d6", "text": "Hämta pojkarna kl 16", "completed": false, "createdAt": "2026-06-11T08:44:00Z"}
-    ]
+    "items": []
   }
 }
